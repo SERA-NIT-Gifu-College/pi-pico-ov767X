@@ -15,6 +15,7 @@ message("${PROJECT_NAME}: ${SRCS}")
 
 target_link_libraries(${PROJECT_NAME} INTERFACE
     pico_stdlib
+    hardware_clocks
     hardware_dma
     hardware_gpio
     hardware_i2c

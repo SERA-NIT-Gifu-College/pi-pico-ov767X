@@ -13,6 +13,7 @@ void sccbWriteByte(SCCB_OV767X *sccb, uint8_t reg, uint8_t dat) {
     };
 
     i2c_write_blocking(sccb->inst, sccb->devAddr, buff, 2, false);
+    sleep_us(1);
 }
 
 void sccbWriteBytes(SCCB_OV767X *sccb, const RegVal regVal, uint8_t len) {

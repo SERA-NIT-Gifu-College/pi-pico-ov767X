@@ -8,7 +8,7 @@ extern "C" {
 #include <stdint.h>
 #include "hardware/i2c.h"
 
-typedef unsigned char** RegVal;
+typedef uint8_t** RegVal;
 
 typedef struct {
     i2c_inst_t *inst;

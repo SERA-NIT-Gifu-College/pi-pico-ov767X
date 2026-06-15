@@ -89,8 +89,8 @@ const uint8_t OV767X_VGA_CFG[OV767X_VGA_CFG_CNT][2] = {
 };
 
 const uint8_t OV767X_QVGA_CFG[OV767X_QVGA_CFG_CNT][2] = {
-    { COM3, 0x02 }, // PCLK scaling
-    { COM14, 0x10 | 0x01 }, // PCLK scaling, div 2
+    { COM3, 0x04 }, // PCLK scaling
+    { COM14, 0x10 | 0x08 | 0x01 }, // PCLK scaling, manual scaling, div 2
     { SCALING_XSC, 0x3A },
     { SCALING_YSC, 0x35 },
     { SCALING_DCWCTL, 0x10 | 0x01 }, // VDS div 2, HDS div 2
@@ -99,7 +99,7 @@ const uint8_t OV767X_QVGA_CFG[OV767X_QVGA_CFG_CNT][2] = {
 };
 
 const uint8_t OV767X_QQVGA_CFG[OV767X_QQVGA_CFG_CNT][2] = {
-    { COM3, 0x02 }, // PCLK scaling
+    { COM3, 0x04 }, // PCLK scaling
     { COM14, 0x10 | 0x08 | 0x02 }, // PCLK scaling, manual scaling, div 4
     { SCALING_XSC, 0x3A },
     { SCALING_YSC, 0x35 },
