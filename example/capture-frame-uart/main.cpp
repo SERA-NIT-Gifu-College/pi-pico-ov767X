@@ -1,8 +1,61 @@
-#include "pico/stdlib.h"
-#include "hardware/i2c.h"
 #include "pi-pico-ov767X/camera.h"
+#include "camera-io.pio.h"
+
+#include <hardware/dma.h>
+#include <hardware/gpio.h>
+#include <hardware/i2c.h>
+#include <hardware/irq.h>
+#include <hardware/pio.h>
+#include <hardware/regs/intctrl.h>
+#include <hardware/structs/io_bank0.h>
+#include <hardware/uart.h>
+#include <pico/stdio.h>
+#include <pico/stdio_uart.h>
+#include <pico/stdlib.h>
+#include <stdio.h>
+
+static uint dma_chan;
+volatile uint16_t x[160 * 120] = {0};
+volatile bool isNewFrameAvailable = false;
+
+void pio_handler(void) {
+    printf("Interrupt from PIO\n");
+    isNewFrameAvailable = true;
+    dma_channel_set_write_addr(dma_chan, &x[0], true);
+    pio_interrupt_clear(pio0, 0);
+}
 
 int main() {
+    stdio_uart_init_full(uart0, 115200, 16, 17);
+    gpio_set_function(16, GPIO_FUNC_UART);
+    gpio_set_function(17, GPIO_FUNC_UART);
+
+    sleep_ms(3000);
+
+    Camera_IO cam_io = {
+        .pio = pio0,
+        .sm_line_scan = 0,
+        .sm_frame_capture = 1,
+        .sm_stream_frames = 2,
+        .ofst_line_scan = 0,
+        .ofst_frame_capture = 0,
+        .ofst_stream_frames = 0
+    };
+
+    setup_camera_io(&cam_io, 2, 160, 120, false, pio_handler);
+
+    dma_chan = dma_claim_unused_channel(true);
+    dma_channel_config dma_cfg = dma_channel_get_default_config(dma_chan);
+    channel_config_set_dreq(&dma_cfg, pio_get_dreq(cam_io.pio, cam_io.sm_line_scan, false));
+    channel_config_set_transfer_data_size(&dma_cfg, DMA_SIZE_8);
+    channel_config_set_read_address_update_type(&dma_cfg, DMA_ADDRESS_UPDATE_NONE);
+    channel_config_set_write_address_update_type(&dma_cfg, DMA_ADDRESS_UPDATE_INCREMENT);
+    dma_channel_configure(dma_chan, &dma_cfg, &x[0], &((cam_io.pio)->rxf[cam_io.sm_line_scan]), 160 * 120 * 2, true);
+
+    gpio_init(0);
+    gpio_init(1);
+    gpio_set_function(0, GPIO_FUNC_I2C);
+    gpio_set_function(1, GPIO_FUNC_I2C);
     i2c_init(i2c0, 400000);
 
     Camera_OV767X camera = {0};
@@ -10,12 +63,40 @@ int main() {
     initialize_OV767X(&camera, (InitArgs_OV767X){
         .sccb_inst = i2c0,
         .sccb_dev_addr = 0x21,
-        .xclk_pin = 0,
-        .format = YUYV,
+        .xclk_pin = 13,
+        .format = RGB565,
         .resolution = QQVGA
     });
 
-    while (1) ;
+    setupClock_OV767X(&(camera.clk));
+    reset_OV767X(&(camera.sccb));
+    config_OV767X(&(camera.sccb), camera.format, camera.resolution);
+
+    sleep_ms(3000);
+
+    start_capture_single(&cam_io);
+
+    while (1) {
+        if (isNewFrameAvailable == true) {
+            uint8_t r, g, b;
+            uint16_t c;
+            for (uint i = 0; i < 120; i++) {
+                for (uint j = 0; j < 160; j++) {
+                    c = x[120*i + j];
+                    r = (c & 0xF800) >> 11;
+                    g = (c & 0x07E0) >> 5;
+                    b = (c & 0x001F);
+
+                    r = r * 255 / 31;
+                    g = g * 255 / 63;
+                    b = b * 255 / 31;
+                    printf("\x1B[48;2;%d;%d;%dm  \x1B[0m", r, g, b);
+                }
+                printf("\r\n");
+            }
+            isNewFrameAvailable = false;
+        }
+    }
 
     return 0;
 }

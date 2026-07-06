@@ -8,8 +8,6 @@ extern "C" {
 #include <stdint.h>
 #include "hardware/i2c.h"
 
-typedef uint8_t** RegVal;
-
 typedef struct {
     i2c_inst_t *inst;
     uint8_t devAddr;
@@ -17,8 +15,6 @@ typedef struct {
 
 void sccbReadByte(SCCB_OV767X *sccb, uint8_t reg, uint8_t *dest);
 void sccbWriteByte(SCCB_OV767X *sccb, uint8_t reg, uint8_t dat);
-void sccbWriteBytes(SCCB_OV767X *sccb, const RegVal regVal, uint8_t len);
-
 
 #ifdef __cplusplus
 }

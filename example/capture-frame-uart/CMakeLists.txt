@@ -28,6 +28,14 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     pi-pico-ov767X
     hardware_gpio
     hardware_i2c
+    hardware_uart
+    hardware_dma
+    hardware_irq
+    hardware_pio
+    hardware_timer
 )
+
+pico_enable_stdio_usb(${PROJECT_NAME} 0)
+pico_enable_stdio_uart(${PROJECT_NAME} 1)
 
 pico_add_extra_outputs(${PROJECT_NAME})

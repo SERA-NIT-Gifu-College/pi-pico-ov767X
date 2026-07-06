@@ -1,0 +1,150 @@
+.pio_version 0
+
+.define public START_LINE_SCAN_IRQ 7
+.define public START_FRAME_CAPTURE_IRQ 6
+.define public SCAN_LINE_COMPLETE_IRQ 5
+.define public FRAME_CAPTURE_COMPLETE_IRQ 0
+
+.program scan_line
+    pull block
+    out y, 16                           ; get horizontal resolution
+.wrap_target
+    wait 1 irq START_LINE_SCAN_IRQ      ; wait for capture_frame ready
+    mov x, y
+    wait 1 pin 9                        ; wait for HS signal
+lp_pixel:
+    wait 1 pin 8
+    wait 0 pin 8                        ; get PCLK pulse
+    in pins, 8                          ; obtain a byte from parallel bus
+    jmp x-- lp_pixel
+    irq SCAN_LINE_COMPLETE_IRQ          ; notify capture_frame
+    wait 0 pin 9                        ; wait for HS blank signal
+.wrap
+
+.program capture_frame
+    pull block
+    out y, 16                           ; get vertical resolution
+.wrap_target
+    irq wait START_FRAME_CAPTURE_IRQ
+    mov x, y
+    wait 1 pin 0
+    wait 0 pin 0                        ; get VS pulse
+lp_line:
+    irq START_LINE_SCAN_IRQ
+    wait 1 irq SCAN_LINE_COMPLETE_IRQ   ; wait for HS
+    jmp x-- lp_line
+    irq wait FRAME_CAPTURE_COMPLETE_IRQ ; notify system for frame processing
+.wrap
+
+.program stream_frames
+.wrap_target
+    wait 1 irq START_FRAME_CAPTURE_IRQ  ; clears START_FRAME_CAPTURE_IRQ continuously
+.wrap
+
+% c-sdk {
+#include <hardware/irq.h>
+
+typedef struct {
+    PIO pio;
+    uint sm_line_scan;
+    uint sm_frame_capture;
+    uint sm_stream_frames;
+    uint ofst_line_scan;
+    uint ofst_frame_capture;
+    uint ofst_stream_frames;
+    bool isStreaming;
+} Camera_IO;
+
+static inline void scan_line_prgoram_init(
+    PIO pio,
+    uint sm,
+    uint ofst,
+    uint base_pin,
+    uint horizontal_res
+) {
+    pio_sm_config cfg = scan_line_program_get_default_config(ofst);
+
+    for (int i = 0; i < 10; i++) {
+        pio_gpio_init(pio, base_pin+i);
+    }
+    pio_sm_set_consecutive_pindirs(
+        pio, sm, base_pin, 10, false
+    );
+    sm_config_set_in_shift(&cfg, false, true, 8);
+    sm_config_set_in_pin_base(&cfg, base_pin);
+
+    sm_config_set_clkdiv(&cfg, 1.f);
+
+    pio_sm_init(pio, sm, ofst, &cfg);
+    pio_sm_put(pio, sm, 2 * horizontal_res - 1);
+}
+
+static inline void capture_frame_program_init(
+    PIO pio,
+    uint sm,
+    uint ofst,
+    uint vs_pin,
+    uint vertical_res
+) {
+    pio_sm_config cfg = capture_frame_program_get_default_config(ofst);
+
+    pio_gpio_init(pio, vs_pin);
+    pio_sm_set_consecutive_pindirs(pio, sm, vs_pin, 1, false);
+    sm_config_set_in_pin_base(&cfg, vs_pin);
+    sm_config_set_clkdiv(&cfg, 1.f);
+
+    pio_sm_init(pio, sm, ofst, &cfg);
+    pio_sm_put(pio, sm, vertical_res - 1);
+}
+
+static inline void stream_frames_program_init(
+    PIO pio,
+    uint sm,
+    uint ofst
+) {
+    pio_sm_config cfg = stream_frames_program_get_default_config(ofst);
+
+    sm_config_set_clkdiv(&cfg, 1.f);
+    pio_sm_init(pio, sm, ofst, &cfg);
+}
+
+void setup_camera_io(
+    Camera_IO *io,
+    uint base_pin,
+    uint horizontal_res,
+    uint vertical_res,
+    bool stream,
+    irq_handler_t frame_handler
+) {
+    io->ofst_line_scan = pio_add_program(io->pio, &scan_line_program);
+    io->ofst_frame_capture = pio_add_program(io->pio, &capture_frame_program);
+
+    if (frame_handler != NULL) {
+        pio_set_irq0_source_enabled(io->pio, pis_interrupt0, true);
+        irq_set_exclusive_handler(PIO_IRQ_NUM(io->pio, 0), frame_handler);
+        irq_set_enabled(PIO_IRQ_NUM(io->pio, 0), true);
+    }
+
+    scan_line_prgoram_init(io->pio, io->sm_line_scan, io->ofst_line_scan, base_pin, horizontal_res);
+    capture_frame_program_init(io->pio, io->sm_frame_capture, io->ofst_frame_capture, base_pin + 10, vertical_res);
+
+    uint mask = (1 << io->sm_line_scan) | (1 << io->sm_frame_capture);
+
+    if (stream) {
+        io->ofst_stream_frames = pio_add_program(io->pio, &stream_frames_program);
+        stream_frames_program_init(io->pio, io->sm_stream_frames, io->ofst_stream_frames);
+        io->isStreaming = true;
+        mask |= (1 << io->sm_stream_frames);
+    }
+
+    pio_enable_sm_mask_in_sync(io->pio, mask);
+}
+
+static inline void start_capture_single(Camera_IO *io) {
+    if (io->isStreaming) return;
+
+    uint16_t instr = 0xC040 | START_FRAME_CAPTURE_IRQ;
+
+    pio_sm_exec(io->pio, io->sm_frame_capture, instr);
+}
+%}

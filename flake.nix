@@ -9,7 +9,7 @@
     let
         pkgs = import nixpkgs { system = "x86_64-linux"; };
         my-pico-sdk = pkgs.pico-sdk.override {
-            withSubmodules = false;
+            withSubmodules = true;
         };
     in
     {
