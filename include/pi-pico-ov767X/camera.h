@@ -9,9 +9,13 @@ extern "C" {
 
 #include "sccb.h"
 
+#define VGA_FRAME_SIZE_OV767X 640*480
+#define QVGA_FRAME_SIZE_OV767X 320*240
+#define QQVGA_FRAME_SIZE_OV767X 160*120
+
 typedef enum {
     RGB565,
-    YUYV
+    YUV422
 } Format_OV767X;
 typedef enum {
     VGA,

@@ -43,7 +43,7 @@ void setFormat_OV767X(SCCB_OV767X *sccb, Format_OV767X fmt) {
                 sccbWriteByte(sccb, OV767X_RGB565_CFG[i][0], OV767X_RGB565_CFG[i][1]);
             }
             break;
-        case YUYV:
+        case YUV422:
             com7_val |= 0x00;
             sccbWriteByte(sccb, COM7, com7_val);
             for (uint8_t i = 0; i < OV767X_YUV422_CFG_CNT; i++) {
@@ -69,7 +69,7 @@ void setResolution_OV767X(SCCB_OV767X *sccb, Resolution_OV767X res) {
             setWindow_OV767X(sccb, 158, 10);
             break;
         case QVGA:
-            com7_val |= 0x00; // set COM7's Output format to VGA
+            com7_val |= 0x10; // set COM7's Output format to QVGA
             sccbWriteByte(sccb, COM7, com7_val);
             for (uint8_t i = 0; i < OV767X_QVGA_CFG_CNT; i++) {
                 sccbWriteByte(sccb, OV767X_QVGA_CFG[i][0], OV767X_QVGA_CFG[i][1]);
@@ -77,7 +77,7 @@ void setResolution_OV767X(SCCB_OV767X *sccb, Resolution_OV767X res) {
             setWindow_OV767X(sccb, 176, 12);
             break;
         case QQVGA:
-            com7_val |= 0x00; // set COM7's Output format to VGA
+            com7_val |= 0x08; // set COM7's Output format to QQVGA
             sccbWriteByte(sccb, COM7, com7_val);
             for (uint8_t i = 0; i < OV767X_QQVGA_CFG_CNT; i++) {
                 sccbWriteByte(sccb, OV767X_QQVGA_CFG[i][0], OV767X_QQVGA_CFG[i][1]);

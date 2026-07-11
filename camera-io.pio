@@ -147,4 +147,24 @@ static inline void start_capture_single(Camera_IO *io) {
 
     pio_sm_exec(io->pio, io->sm_frame_capture, instr);
 }
+
+static inline void start_stream(Camera_IO *io) {
+    if (io->isStreaming) return;
+
+    uint mask = (1 << io->sm_line_scan) | (1 << io->sm_frame_capture);
+    pio_set_sm_mask_enabled(io->pio, mask, false);
+    mask |= (1 << io->sm_stream_frames);
+    pio_enable_sm_mask_in_sync(io->pio, mask);
+    io->isStreaming = true;
+}
+
+static inline void stop_stream(Camera_IO *io) {
+    if (!(io->isStreaming)) return;
+
+    uint mask = (1 << io->sm_line_scan) | (1 << io->sm_frame_capture) | (1 << io->sm_stream_frames);
+    pio_set_sm_mask_enabled(io->pio, mask, false);
+    mask &= ~(1 << io->sm_stream_frames);
+    pio_enable_sm_mask_in_sync(io->pio, mask);
+    io->isStreaming = false;
+}
 %}

@@ -2,7 +2,7 @@
 #include <stdint.h>
 
 const uint8_t OV767X_COM_CFG[OV767X_COM_CFG_CNT][2] = {
-    { TSLB, 0x04 },
+    { TSLB, 0x05 },
     { CLKRC, 0x80 | 0x00 }, // no clk div with reserved set
     { GAIN, 0x00 },
     { AECH, 0x00 },
@@ -22,7 +22,7 @@ const uint8_t OV767X_COM_CFG[OV767X_COM_CFG_CNT][2] = {
     { HAECC6, 0x90 },
     { HAECC7, 0x94 },
     { COM5, 0x61 }, // reserved
-    { COM6, 0x4b }, // enable timing reset on format change
+    { COM6, 0x4B }, // enable timing reset on format change
     { MVFP, 0x07 }, // virtical & horizontal flip
     { COM12, 0x78 },
     { DBLV, 0x00 }, // Bypass PLL, Enable Internal Regulator
