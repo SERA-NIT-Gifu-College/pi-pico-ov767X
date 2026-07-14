@@ -11,3 +11,6 @@ OV7675 *should* be supported out of the box.
 
 > Although we provide full VGA(640x480) resolution setting,
 > it is resonable to use QVGA or QQVGA due to RAM limitation.
+
+This library is expected to have at least 2 PIO state machines and
+one NVIC targetable IRQs available.
