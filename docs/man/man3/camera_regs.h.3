@@ -1,0 +1,71 @@
+.TH "include/pi-pico-ov767X/camera_regs.h" 3 "Version 0.1.0" "Pi Pico OV767X" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+include/pi-pico-ov767X/camera_regs.h \- List of camera's registors and declaration of camera configuration data\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBOV767X_Registers\fP : uint8_t "
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "const uint8_t \fBOV767X_COM_CFG\fP [OV767X_COM_CFG_CNT][2]"
+.br
+.ti -1c
+.RI "const uint8_t \fBOV767X_RGB565_CFG\fP [OV767X_RGB565_CFG_CNT][2]"
+.br
+.ti -1c
+.RI "const uint8_t \fBOV767X_YUV422_CFG\fP [OV767X_YUV422_CFG_CNT][2]"
+.br
+.ti -1c
+.RI "const uint8_t \fBOV767X_VGA_CFG\fP [OV767X_VGA_CFG_CNT][2]"
+.br
+.ti -1c
+.RI "const uint8_t \fBOV767X_QVGA_CFG\fP [OV767X_QVGA_CFG_CNT][2]"
+.br
+.ti -1c
+.RI "const uint8_t \fBOV767X_QQVGA_CFG\fP [OV767X_QQVGA_CFG_CNT][2]"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+List of camera's registors and declaration of camera configuration data\&. 
+
+This file contains list of camera's registors described in public documentations\&. It also contains string of camera configuration registor - data pairs used in some functions in \fBcamera\&.h\fP \&. 
+.PP
+\fBAuthor\fP
+.RS 4
+kenryuS 
+.RE
+.PP
+
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBOV767X_Registers\fP : uint8_t"
+List of available camera registors, taken from OV7670's public documentation 
+.SH "Variable Documentation"
+.PP 
+.SS "const uint8_t OV767X_COM_CFG[OV767X_COM_CFG_CNT][2]\fR [extern]\fP"
+Common camera configurations 
+.SS "const uint8_t OV767X_RGB565_CFG[OV767X_RGB565_CFG_CNT][2]\fR [extern]\fP"
+Configurations for RGB565 format 
+.SS "const uint8_t OV767X_YUV422_CFG[OV767X_YUV422_CFG_CNT][2]\fR [extern]\fP"
+Configurations for YUV422 format 
+.SS "const uint8_t OV767X_VGA_CFG[OV767X_VGA_CFG_CNT][2]\fR [extern]\fP"
+Configurations for VGA resolution 
+.SS "const uint8_t OV767X_QVGA_CFG[OV767X_QVGA_CFG_CNT][2]\fR [extern]\fP"
+Configurations for QVGA resolution 
+.SS "const uint8_t OV767X_QQVGA_CFG[OV767X_QQVGA_CFG_CNT][2]\fR [extern]\fP"
+Configurations for QQVGA resolution 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Pi Pico OV767X from the source code\&.

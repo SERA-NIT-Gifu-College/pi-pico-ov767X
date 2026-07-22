@@ -1,0 +1,38 @@
+.TH "CameraClock_OV767X" 3 "Version 0.1.0" "Pi Pico OV767X" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+CameraClock_OV767X
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <camera\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "uint8_t \fBpin\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBslice_num\fP"
+.br
+.ti -1c
+.RI "bool \fBenabled\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+XCLK Generator Descriptor 
+.SH "Field Documentation"
+.PP 
+.SS "uint8_t CameraClock_OV767X::pin"
+GPIO pin to output clock signal 
+.SS "uint8_t CameraClock_OV767X::slice_num"
+PWM slice number corresponding to pin 
+.SS "bool CameraClock_OV767X::enabled"
+Whether if clock is running 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Pi Pico OV767X from the source code\&.

@@ -1,0 +1,55 @@
+.TH "InitArgs_OV767X" 3 "Version 0.1.0" "Pi Pico OV767X" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+InitArgs_OV767X
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fR#include <camera\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "i2c_inst_t * \fBsccb_inst\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBsccb_dev_addr\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBxclk_pin\fP"
+.br
+.ti -1c
+.RI "\fBFormat_OV767X\fP \fBformat\fP"
+.br
+.ti -1c
+.RI "\fBResolution_OV767X\fP \fBresolution\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Arguments for initialize_OV767X 
+.PP
+\fBSee also\fP
+.RS 4
+\fBinitialize_OV767X\fP 
+.RE
+.PP
+
+.SH "Field Documentation"
+.PP 
+.SS "i2c_inst_t* InitArgs_OV767X::sccb_inst"
+I2C instance which camera SCCB interface is connected to 
+.SS "uint8_t InitArgs_OV767X::sccb_dev_addr"
+7 bit device address to camera 
+.SS "uint8_t InitArgs_OV767X::xclk_pin"
+Pin to be used for XCLK generation 
+.SS "\fBFormat_OV767X\fP InitArgs_OV767X::format"
+Color format to use 
+.SS "\fBResolution_OV767X\fP InitArgs_OV767X::resolution"
+Image resultion to use 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Pi Pico OV767X from the source code\&.

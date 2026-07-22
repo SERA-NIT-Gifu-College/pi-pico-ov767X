@@ -1,3 +1,9 @@
+/**
+ * @file camera_regs.h
+ * @brief List of camera's registors and declaration of camera configuration data
+ * @details This file contains list of camera's registors described in public documentations. It also contains string of camera configuration registor - data pairs used in some functions in camera.h .
+ * @author kenryuS
+ */
 #ifndef __PI_PICO_OV767X_CAMERA_REGS_H__
 #define __PI_PICO_OV767X_CAMERA_REGS_H__
 
@@ -14,14 +20,16 @@ extern "C" {
 #define OV767X_QVGA_CFG_CNT 7
 #define OV767X_QQVGA_CFG_CNT 7
 
-extern const uint8_t OV767X_COM_CFG[OV767X_COM_CFG_CNT][2];
-extern const uint8_t OV767X_RGB565_CFG[OV767X_RGB565_CFG_CNT][2];
-extern const uint8_t OV767X_YUV422_CFG[OV767X_YUV422_CFG_CNT][2];
-extern const uint8_t OV767X_VGA_CFG[OV767X_VGA_CFG_CNT][2];
-extern const uint8_t OV767X_QVGA_CFG[OV767X_QVGA_CFG_CNT][2];
-extern const uint8_t OV767X_QQVGA_CFG[OV767X_QQVGA_CFG_CNT][2];
+extern const uint8_t OV767X_COM_CFG[OV767X_COM_CFG_CNT][2]; /**< Common camera configurations */
+extern const uint8_t OV767X_RGB565_CFG[OV767X_RGB565_CFG_CNT][2]; /**< Configurations for RGB565 format */
+extern const uint8_t OV767X_YUV422_CFG[OV767X_YUV422_CFG_CNT][2]; /**< Configurations for YUV422 format */
+extern const uint8_t OV767X_VGA_CFG[OV767X_VGA_CFG_CNT][2]; /**< Configurations for VGA resolution */
+extern const uint8_t OV767X_QVGA_CFG[OV767X_QVGA_CFG_CNT][2]; /**< Configurations for QVGA resolution */
+extern const uint8_t OV767X_QQVGA_CFG[OV767X_QQVGA_CFG_CNT][2]; /**< Configurations for QQVGA resolution */
 
-
+/**
+ * List of available camera registors, taken from OV7670's public documentation
+ */
 typedef enum : uint8_t {
     GAIN,
     BLUE,

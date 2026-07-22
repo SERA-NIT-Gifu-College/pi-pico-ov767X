@@ -1,0 +1,152 @@
+.TH "src/camera.c" 3 "Version 0.1.0" "Pi Pico OV767X" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/camera.c \- Implementations of camera related functions\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBinitialize_OV767X\fP (\fBCamera_OV767X\fP *camera, \fBInitArgs_OV767X\fP args)"
+.br
+.ti -1c
+.RI "void \fBreset_OV767X\fP (\fBSCCB_OV767X\fP *sccb)"
+.br
+.ti -1c
+.RI "void \fBconfig_OV767X\fP (\fBSCCB_OV767X\fP *sccb, \fBFormat_OV767X\fP fmt, \fBResolution_OV767X\fP res)"
+.br
+.ti -1c
+.RI "void \fBsetFormat_OV767X\fP (\fBSCCB_OV767X\fP *sccb, \fBFormat_OV767X\fP fmt)"
+.br
+.ti -1c
+.RI "void \fBsetResolution_OV767X\fP (\fBSCCB_OV767X\fP *sccb, \fBResolution_OV767X\fP res)"
+.br
+.ti -1c
+.RI "void \fBsetupClock_OV767X\fP (\fBCameraClock_OV767X\fP *clk)"
+.br
+.ti -1c
+.RI "void \fBstartClock_OV767X\fP (\fBCameraClock_OV767X\fP *clk)"
+.br
+.ti -1c
+.RI "void \fBstopClock_OV767X\fP (\fBCameraClock_OV767X\fP *clk)"
+.br
+.ti -1c
+.RI "void \fBsetWindow_OV767X\fP (\fBSCCB_OV767X\fP *sccb, uint16_t hStart, uint16_t vStart)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Implementations of camera related functions\&. 
+
+This file contains implementations of camera control functions\&. The configuration of camera with these functions is required for proper data read\&. 
+.PP
+\fBAuthor\fP
+.RS 4
+kenryuS 
+.RE
+.PP
+
+.SH "Function Documentation"
+.PP 
+.SS "void initialize_OV767X (\fBCamera_OV767X\fP * camera, \fBInitArgs_OV767X\fP args)"
+Initialize \fBCamera_OV767X\fP structure with arguments 
+.PP
+\fBParameters\fP
+.RS 4
+\fIcamera\fP A pointer to camera descriptor to be initialized 
+.br
+\fIargs\fP Arguments structure with configurations 
+.RE
+.PP
+
+.SS "void reset_OV767X (\fBSCCB_OV767X\fP * sccb)"
+Resets all registers in camera 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsccb\fP A pointer to SCCB interface descriptor to the camera 
+.RE
+.PP
+
+.SS "void config_OV767X (\fBSCCB_OV767X\fP * sccb, \fBFormat_OV767X\fP fmt, \fBResolution_OV767X\fP res)"
+Setup camera with presets of registers 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsccb\fP A pointer to SCCB interface descriptor to the camera 
+.br
+\fIfmt\fP Color format to be used 
+.br
+\fIres\fP Image resoultion to be used 
+.RE
+.PP
+
+.SS "void setFormat_OV767X (\fBSCCB_OV767X\fP * sccb, \fBFormat_OV767X\fP fmt)"
+Sets color format 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsccb\fP A pointer to SCCB interface descriptor to the camera 
+.br
+\fIfmt\fP New color format configuration 
+.RE
+.PP
+
+.SS "void setResolution_OV767X (\fBSCCB_OV767X\fP * sccb, \fBResolution_OV767X\fP res)"
+Sets image resolution 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsccb\fP A pointer to SCCB interface descriptor to the camera 
+.br
+\fIres\fP New resolution configuration 
+.RE
+.PP
+
+.SS "void setupClock_OV767X (\fBCameraClock_OV767X\fP * clk)"
+Setup and start XCLK generation 
+.PP
+\fBParameters\fP
+.RS 4
+\fIclk\fP A pointer to XCLK generator descriptor 
+.RE
+.PP
+
+.SS "void startClock_OV767X (\fBCameraClock_OV767X\fP * clk)"
+Starting XCLK generation manually 
+.PP
+\fBParameters\fP
+.RS 4
+\fIclk\fP A pointer to XCLK generator descriptor 
+.RE
+.PP
+
+.SS "void stopClock_OV767X (\fBCameraClock_OV767X\fP * clk)"
+Stopping XCLK generation manually 
+.PP
+\fBParameters\fP
+.RS 4
+\fIclk\fP A pointer to XCLK generator descriptor 
+.RE
+.PP
+
+.SS "void setWindow_OV767X (\fBSCCB_OV767X\fP * sccb, uint16_t hStart, uint16_t vStart)"
+Sets windowing of image sensor with horizontal and vertical starting values 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsccb\fP A pointer to SCCB interface descriptor to the camera 
+.br
+\fIhStart\fP New horizontal starting value 
+.br
+\fIvStart\fP New vertical starting value 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Pi Pico OV767X from the source code\&.
